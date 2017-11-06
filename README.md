@@ -13,7 +13,7 @@ Use `nodemon src/app.coffee` or `npm start`
 
 ## Tests 
 
-For later 
+Use `npm test` or `./bin/test`
 
 ## Contributors
 
