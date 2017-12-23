@@ -1,0 +1,42 @@
+extends layout
+
+block head
+  // Here will go our css/js links
+  script(type="text/javascript" src="/js/jquery-3.2.1.min.js" charset="utf-8")
+  script(type="text/javascript" src="/js/bootstrap.min.js" charset="utf-8")
+  script(type="text/javascript" src="/js/index.js" charset="utf-8")
+  script(type="text/javascript" src="https://d3js.org/d3.v4.min.js" charset="utf-8")
+  link(rel='stylesheet', href='/css/bootstrap.min.css')
+  link(rel='stylesheet', href='/css/bootstrap-theme.min.css')
+  link(rel='stylesheet', href='/css/main.css')
+
+block content
+  div.container
+    div.row
+      div.col-lg-6.col-md-6.col-sm-6.col-xs-6
+
+          form(method='post', action='/signin')
+            h4 Connexion
+            div
+              input(type='text' name='login' placeholder='Email' pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required)
+            div
+              input(type='password', name='password' placeholder='Password' pattern=".{8,}" required)
+            button.button(type="submit") Connect
+      div.col-lg-6.col-md-6.col-sm-6.col-xs-6
+
+          form(method='post', action='/signup')
+            h4 Subscription
+            div
+              input(type='text' name='login' placeholder='Email' pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required)
+            div
+              input(type='password' name='password' placeholder='Password' pattern=".{8,}" required)
+            button.button(type="submit") Subscribe
+
+  script
+    :coffee-script
+      $('input').focusout ->
+        if $(this).val() != ""
+          $(this).parent().find('label').hide()
+        else
+          $(this).parent().find('label').show()
+        return

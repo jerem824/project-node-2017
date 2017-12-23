@@ -1,24 +1,25 @@
 
 # AST 2017 - Express codebase
 
-Code base for ECE AST class' final project
+Jeremy Hokayem Final Project
 
-## Installation instructions 
+## Installation instructions
 
 Just clone it from github & run `npm install`
 
-## Run 
+## Run
 
 Use `nodemon src/app.coffee` or `npm start`
 
-## Tests 
+## Tests
 
 Use `npm test` or `./bin/test`
 
 ## Contributors
 
-Cesar Berezowski 
+Cesar Berezowski
+Jeremy Hokayem
 
-## License 
+## License
 
 Apache2

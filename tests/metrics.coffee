@@ -20,4 +20,9 @@ describe "metrics", () ->
       metrics.get '1', (err, metrics) ->
         return next err if err
         # do some tests here on the returned metrics
+        [metric1, metric2] = metrics
+        metric1.timestamp.should.equal (metric1.timestamp)
+        metric1.value.should.equal (metric1.value)
+        metric2.timestamp.should.equal (metric2.timestamp)
+        metric2.value.should.equal (metric2.value)
         next()

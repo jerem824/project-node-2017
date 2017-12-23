@@ -5,23 +5,73 @@ block head
   script(type="text/javascript" src="/js/jquery-3.2.1.min.js" charset="utf-8")
   script(type="text/javascript" src="/js/bootstrap.min.js" charset="utf-8")
   script(type="text/javascript" src="/js/index.js" charset="utf-8")
+  script(type="text/javascript" src="https://d3js.org/d3.v4.min.js" charset="utf-8")
   link(rel='stylesheet', href='/css/bootstrap.min.css')
   link(rel='stylesheet', href='/css/bootstrap-theme.min.css')
+  link(rel='stylesheet', href='/css/main.css')
 
-block content  
-  div.container
-    div.col-md-6.col-md-offset-3
-      p #{text}
-      button#show-metrics(type="button" class="btn btn-success") Bring the metrics
+block content
+  body
+    .heading
+      h4 Welcome #{name}
+      p
+        a(href='/signout') Log Out
+
+    div
+      a(href='/newmetrics')
+        button.button2(type="button") Add metric
+
+
+    div
+      button.button2#show-metrics(type="button") Display metrics
       #metrics
-      
-  script 
-    :coffee-script
-      $('#show-metrics').click (e) ->
-        e.preventDefault()
-        $.getJSON "/metrics.json", {}, (data) ->
-          content = "<ul>"
-          for d in data
-            content += "<li>timestamp: #{d.timestamp}, value: #{d.value}</li>"
-          content += "</ul>"
-          $('#metrics').append content
+
+
+
+    script
+      :coffee-script
+        $("#show-metrics").click (e) ->
+            dataset = []
+            e.preventDefault()
+            $( "#display-metrics" ).remove();
+            $( "svg" ).remove();
+            $.getJSON "/metrics.json", {}, (data) ->
+              if(data.length == 0)
+                console.log("Empty")
+              else
+
+                content = "<ul id='display-metrics'>"
+                for d in data
+                  content += "<li data-val='#{d.timestamp}'>timestamp: #{d.timestamp}, value: #{d.value} <button class='btn btn-danger' id='del'> Delete metrics</button></li>"
+                  dataset.push(parseInt(d.value))
+                barPadding = 1
+
+                w = 500
+                h = 300
+                svg = d3.select('.chart-container').append('svg').attr('width', w).attr('height', h)
+                svg.selectAll('rect').data(dataset).enter().append('rect').attr('x', (d, i) ->
+                  i*w/dataset.length
+                ).attr('y',(d) ->
+                  h-(d*4)
+                ).attr('width', w / dataset.length - barPadding).attr('height', (d) ->
+                  d*4
+                ).attr 'fill', (d) ->
+                  'rgb(0,0, '+ d*10 + ')'
+                svg.selectAll('text').data(dataset).enter().append('text').text((d) ->
+                  d
+                ).attr('x', (d,i) ->
+                  i*w/dataset.length+5
+                ).attr('y',(d) ->
+                  h-(d*4)+15
+                ).attr 'fill', 'white'
+                content += "</ul>"
+                $("#metrics").append content
+
+        #Delete an element
+        $('body').on 'click', 'button#del', ->
+          element = $(this).parent()
+          value = element.data('val')
+          $.get 'delete/' + value, (data) ->
+            element.hide()
+            return
+          return
